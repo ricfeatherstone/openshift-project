@@ -8,10 +8,11 @@ oc new-app jenkins-persistent \
     -p JENKINS_IMAGE_STREAM_TAG=jenkins-bootstrap:latest
 oc new-build https://github.com/ricfeatherstone/openshift-project-provisioning.git#feature/create-projects \
     --strategy=pipeline \
-    --name=test-pipeline \
-    -e NAME=test \
+    --name=create-projects
+oc start-build create-projects \
+    -e NAME=example \
     -e BUILD_SUFFIX=cicd \
-    -e NON_PROD_SUFFIXES='sandpit,test'
+    -e NON_PROD_SUFFIXES=sandpit,test
 oc login -u system:admin
 oc create -f - <<EOF
 apiVersion: v1

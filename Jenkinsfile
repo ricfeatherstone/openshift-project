@@ -8,8 +8,20 @@ stage('Create Projects') {
         projectNames = listProjectNames(name, buildSuffix, nonProductionSuffixes)
 
         for(projectName in projectNames) {
-            echo "Creating project - ${projectName}"
-            sh "oc new-project ${projectName}"
+            if( !openshift.selector('project', projectName).exists() ) {
+                echo "Creating project - ${projectName}"
+                sh "oc new-project ${projectName}"
+            }
+        }
+    }
+}
+
+state('Launch Jenkins') {
+    openshift.withCluster() {
+        openshift.withProject('openshift') {
+            template = openshift.selector('template', 'jenkins-persistent')
+
+            echo "${template.describe}"
         }
     }
 }
