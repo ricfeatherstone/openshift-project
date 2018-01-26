@@ -1,6 +1,6 @@
-def name = 'test'
-def buildSuffix = 'cicd'
-def nonProductionSuffixes = ['sandpit']
+def name = env.NAME
+def buildSuffix = env.BUILD_SUFFIX
+def nonProductionSuffixes = env.NON_PROD_SUFFIXES
 def projectNames = []
 
 stage('Create Projects') {
@@ -16,7 +16,8 @@ stage('Create Projects') {
 
 def listProjectNames(name, buildSuffix, nonProductionSuffixes) {
     names = [name]
-    for(suffix in nonProductionSuffixes + buildSuffix) {
+    suffixes = nonProductionSuffixes.split(',') + buildSuffix
+    for(suffix in suffixes) {
         names.add("${name}-${suffix}")
     }
 

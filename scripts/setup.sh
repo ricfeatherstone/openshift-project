@@ -6,6 +6,12 @@ oc new-build jenkins:2~https://github.com/ricfeatherstone/openshift-jenkins-boot
 oc new-app jenkins-persistent \
     -p NAMESPACE=$(oc project -q) \
     -p JENKINS_IMAGE_STREAM_TAG=jenkins-bootstrap:latest
+oc new-build https://github.com/ricfeatherstone/openshift-project-provisioning.git#feature/create-projects \
+    --strategy=pipeline \
+    --name=test-pipeline \
+    -e NAME=test \
+    -e BUILD_SUFFIX=cicd \
+    -e NON_PROD_SUFFIXES='sandpit,test'
 oc login -u system:admin
 oc create -f - <<EOF
 apiVersion: v1
@@ -23,7 +29,3 @@ rules:
   - create
 EOF
 oc adm policy add-cluster-role-to-user project-provisioner system:serviceaccount:project-provisioning:jenkins
-oc login -u developer
-oc new-build https://github.com/ricfeatherstone/openshift-project-provisioning.git#feature/create-projects \
-    --strategy=pipeline \
-    --name=test-pipeline

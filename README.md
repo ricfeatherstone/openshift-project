@@ -58,5 +58,8 @@ oc adm policy add-cluster-role-to-user project-provisioner system:serviceaccount
 ```bash
 oc new-build https://github.com/ricfeatherstone/openshift-project-provisioning.git#feature/create-projects \
     --strategy=pipeline \
-    --name=test-pipeline
+    --name=test-pipeline \
+    -e NAME=test \
+    -e BUILD_SUFFIX=cicd \
+    -e NON_PROD_SUFFIXES='sandpit,test'
 ```
