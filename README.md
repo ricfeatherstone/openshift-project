@@ -3,6 +3,12 @@
 Use [Openshift Pipelines](https://docs.openshift.com/container-platform/3.7/dev_guide/openshift_pipeline.html) to 
 provision projects for your CICD pipeline.
 
+Given a project name, this will create:
+
+* A CICD project containing Jenkins to run the builds called <name>-<buildSuffix>
+* For all non production environments a project called <name>-<environment>
+* A production environment called <name>
+
 ## Setup 
 
 1. Create the project provisioning namespace
